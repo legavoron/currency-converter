@@ -1,0 +1,21 @@
+.currencyContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.currency {
+    list-style-type: none;
+    padding: 10px 0;
+}
+.InputCurrency {
+    display: block;
+    width: 70%;
+}
+.imgCurrency_Container {
+    width: 10%;
+}
+.ImgCurrency {
+    width: 100%;
+    object-fit: contain;
+}
