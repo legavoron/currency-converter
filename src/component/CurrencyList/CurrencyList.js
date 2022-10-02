@@ -2,11 +2,10 @@ import './CurrencyList.css';
 import Currency from '../currency/Currency';
 
 
-const CurrencyList = ({data, BynValue}) => {
-    
-    const listItems = data.map((item) => {
+const CurrencyList = ({currencies, onChange}) => {
+    const listItems = currencies.map((item) => {
         return (
-            <Currency key={item.Cur_ID} value={item.Cur_Abbreviation}/>
+            <Currency key={item.Cur_ID} name={item.Cur_ID} scale={item.Cur_Scale} rate={item.Cur_OfficialRate} value={item.value} onChange={onChange} />
         )
     })
 
@@ -14,7 +13,6 @@ const CurrencyList = ({data, BynValue}) => {
     return (
         <div className='currencyList'>
             <ul className='listItems'>
-                <Currency key="BYN" value="BYN" startValue={BynValue}/>
                 {listItems}
             </ul>
         </div>

@@ -1,14 +1,16 @@
 import './Currency.css';
+import { useState } from 'react';
 import BYN from '../../img/BYN.jpg';
 import USD from '../../img/USD.jpg';
 import EUR from '../../img/EUR.jpg';
 import RUB from '../../img/RUB.jpg';
 import UAH from '../../img/UAH.jpg';
 
-const Currency = ({value, startValue}) => {
+const Currency = ({name, rate, value, scale, onChange}) => {
+
     let imgWay = '';
 
-    switch (value) {
+    switch (name) {
         case "BYN" :
             imgWay = BYN;
             break;
@@ -27,18 +29,25 @@ const Currency = ({value, startValue}) => {
 
     }
 
+    const [curValue, setCurValue] = useState({
+        id: '',
+        value: 1,
+    });
 
+    
     return (
         <>
             <li className='currency'>
                 <div className='currencyContainer'>
-                    <input className='InputCurrency' id={value} value={startValue}/>
+                    <input className='InputCurrency' 
+                    id={name} 
+                    defaultValue={value} 
+                    onChange={onChange}/>
                     <div className='imgCurrency_Container'>
                         <img src={imgWay} alt={value} className="ImgCurrency"/>
                     </div>
-                    {value}
+                    {name}
                 </div>
-                
             </li>
         </>
         

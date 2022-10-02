@@ -1,14 +1,14 @@
 import './Converter.css';
 import CurrencyList from '../CurrencyList/CurrencyList';
 
-const Converter = ({data, BynValue}) => {
+const Converter = ({currencies, onChange, startCurrency}) => {
     
    
 
 
     return (
         <div className="converter">
-            <CurrencyList data={data} BynValue={BynValue}/>
+            <CurrencyList currencies={currencies} onChange={onChange} startCurrency={startCurrency}/>
         </div>
     )
 }

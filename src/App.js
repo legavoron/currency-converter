@@ -4,16 +4,66 @@ import Heading from './component/heading/Heading';
 import Converter from './component/converter/Converter';
 
 function App() {
-  const [BynValue, setBynValue] = useState(1);
-  const [UsdValue, setUsdValue] = useState('');
-  const [EurValue, setEurValue] = useState('');
-  const [RubValue, setRubrValue] = useState('');
-  const [UahValue, setUhValue] = useState('');
-  
   const [data, setData] = useState([]);
+
+  const [currencyList, setCurrencyList] = useState([]);
+
+  let byn = {
+    Cur_ID: 'BYN',
+    Cur_Scale: 1,
+    Cur_Abbreviation: 'BYN',
+    Cur_OfficialRate: 1,
+    value: 1,
+  };
+
+  function createCurrencies() {
+    const list = [byn, ...data];
+
+    const changeCurrencies = list.map(item => {
+      return ({
+        Cur_Scale: item.Cur_Scale,
+        Cur_ID: item.Cur_Abbreviation,
+        Cur_OfficialRate: item.Cur_OfficialRate,
+        value: +(byn.value / item.Cur_OfficialRate * item.Cur_Scale).toFixed(4)
+      })
+    })
+    return [...changeCurrencies];
+  }
   
 
+  function onChange (event) {
+    const name = event.target.id;
+    const value = event.target.value;
+
+    const currency = currencyList.filter(item => {
+      if (item.Cur_ID === name) {
+        return item;
+      }
+    }); // Отдельная валюта, которая совпадает с event
+
+    byn.value = +(value * currency[0].Cur_OfficialRate / currency[0].Cur_Scale).toFixed(4); 
+    // меняем значение Byn 
+
+    // создаем новый список, который потом поместим в state
+    const listCur = [byn, ...data];
+    
+    const changeCurrencies = listCur.map(item => {
+      let num = +(name === item.Cur_Abbreviation) ? +value : +(byn.value / item.Cur_OfficialRate * item.Cur_Scale).toFixed(4);
+      return ({
+        Cur_Scale: item.Cur_Scale,
+        Cur_ID: item.Cur_Abbreviation,
+        Cur_OfficialRate: item.Cur_OfficialRate,
+        value: num
+      });
+    })
+
+    setCurrencyList([...changeCurrencies]);
+    
+    console.log(changeCurrencies);
+    console.log(setCurrencyList);
+  }
  
+
   useEffect( () => {
       const fetchData = async () => {
         const response = await fetch('https://www.nbrb.by/api/exrates/rates?periodicity=0');
@@ -26,22 +76,23 @@ function App() {
             elem.Cur_Abbreviation === 'EUR' ||
             elem.Cur_Abbreviation === 'UAH'
           )
-        })
-        setData(currencies);          
-      };
+        });
 
-    fetchData()
+        setData([...currencies]); 
+      };
+      
+    fetchData();
+
+    const currencies = createCurrencies();
+    setCurrencyList([...currencies]);
     }, []);
+
 
 
   return (
     <div className="App">
       <Heading/>
-      <Converter data={data} BynValue={BynValue}/>
-
-
-
-
+      <Converter currencies={currencyList} onChange={onChange}/>
     </div>
   );
 }
