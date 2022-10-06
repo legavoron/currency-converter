@@ -1,5 +1,5 @@
 import './Currency.css';
-import { useState } from 'react';
+// import { useState } from 'react';
 import BYN from '../../img/BYN.jpg';
 import USD from '../../img/USD.jpg';
 import EUR from '../../img/EUR.jpg';
@@ -29,10 +29,10 @@ const Currency = ({name, rate, value, scale, onChange}) => {
 
     }
 
-    const [curValue, setCurValue] = useState({
-        id: '',
-        value: 1,
-    });
+    // const [curValue, setCurValue] = useState({
+    //     id: '',
+    //     value: 1,
+    // });
 
     
     return (
@@ -41,7 +41,7 @@ const Currency = ({name, rate, value, scale, onChange}) => {
                 <div className='currencyContainer'>
                     <input className='InputCurrency' 
                     id={name} 
-                    defaultValue={value} 
+                    value={value} 
                     onChange={onChange}/>
                     <div className='imgCurrency_Container'>
                         <img src={imgWay} alt={value} className="ImgCurrency"/>
