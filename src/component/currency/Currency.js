@@ -29,12 +29,7 @@ const Currency = ({name, rate, value, scale, onChange}) => {
 
     }
 
-    // const [curValue, setCurValue] = useState({
-    //     id: '',
-    //     value: 1,
-    // });
-
-    
+        
     return (
         <>
             <li className='currency'>

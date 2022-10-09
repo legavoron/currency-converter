@@ -5,6 +5,7 @@ import Converter from './component/converter/Converter';
 
 function App() {
   
+  const [data, setData] = useState([]);
 
   const [currencyList, setCurrencyList] = useState([]);
 
@@ -16,36 +17,6 @@ function App() {
     value: 1,
   };
 
-
-  function onChange (event) {
-    const name = event.target.id;
-    const value = event.target.value;
-
-    const currency = currencyList.filter(item => {
-      if (item.Cur_ID === name) {
-        return item.Cur_ID === name;
-      }
-    }); 
-
-    byn.value = +(value * currency[0].Cur_OfficialRate / currency[0].Cur_Scale).toFixed(4); 
-    
-    const listCur = [byn, ...data];
-
-    const changeCurrencies = listCur.map(item => {
-      let num = +(name === item.Cur_Abbreviation) ? +value : +(byn.value / item.Cur_OfficialRate * item.Cur_Scale).toFixed(4);
-      return ({
-        Cur_Scale: item.Cur_Scale,
-        Cur_ID: item.Cur_Abbreviation,
-        Cur_OfficialRate: item.Cur_OfficialRate,
-        value: num
-      });
-    })
-
-    setCurrencyList([...changeCurrencies]);
-  }
- 
-
-  const [data, setData] = useState([]);
 
   useEffect( () => {
       const fetchData = async () => {
@@ -66,31 +37,56 @@ function App() {
       
     fetchData()
       .catch(console.error)
+  }, []);
 
-      console.log(data);
+    
+  useEffect( () => {
+    const currencies = createCurrencies();
+    setCurrencyList([...currencies]);  
+  }, [data])
 
+  function createCurrencies() {
+    const list = [byn, ...data];
 
-      const currencies = createCurrencies();
-      setCurrencyList([...currencies]);    
-    }, []);
-
-
-    function createCurrencies() {
-      const list = [byn, ...data];
-  
-      // в list попадает только byn, data почему-то пустая
-  
-      const changeCurrencies = list.map(item => {
-        return ({
-          Cur_Scale: item.Cur_Scale,
-          Cur_ID: item.Cur_Abbreviation,
-          Cur_OfficialRate: item.Cur_OfficialRate,
-          value: +(byn.value / item.Cur_OfficialRate * item.Cur_Scale).toFixed(4)
-        })
+    const changeCurrencies = list.map(item => {
+      return ({
+        Cur_Scale: item.Cur_Scale,
+        Cur_ID: item.Cur_Abbreviation,
+        Cur_OfficialRate: item.Cur_OfficialRate,
+        value: +(byn.value / item.Cur_OfficialRate * item.Cur_Scale).toFixed(4)
       })
-      return [...changeCurrencies];
-    }
+    })
 
+    return [...changeCurrencies];
+  }
+
+
+function onChange (event) {
+  const name = event.target.id;
+  const value = event.target.value;
+
+  const currency = currencyList.filter(item => {
+    if (item.Cur_ID === name) {
+      return item.Cur_ID === name;
+    }
+  }); 
+
+  byn.value = +(value * currency[0].Cur_OfficialRate / currency[0].Cur_Scale).toFixed(4); 
+  
+  const listCur = [byn, ...data];
+
+  const changeCurrencies = listCur.map(item => {
+    let num = +(name === item.Cur_Abbreviation) ? +value : +(byn.value / item.Cur_OfficialRate * item.Cur_Scale).toFixed(4);
+    return ({
+      Cur_Scale: item.Cur_Scale,
+      Cur_ID: item.Cur_Abbreviation,
+      Cur_OfficialRate: item.Cur_OfficialRate,
+      value: num
+    });
+  })
+
+  setCurrencyList([...changeCurrencies]);
+}
 
 
   return (
